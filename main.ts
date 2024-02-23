@@ -3,8 +3,8 @@ namespace SpriteKind {
     export const dragon = SpriteKind.create()
     export const egg = SpriteKind.create()
     export const dragonfood = SpriteKind.create()
+    export const dragonnest = SpriteKind.create()
 }
-let list: number[] = []
 sprites.onOverlap(SpriteKind.Player, SpriteKind.dragonfood, function (sprite, otherSprite) {
     if (Dragon_food.image == img`
         . . . . . . . . . . . . . . . . 
@@ -179,6 +179,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile12`, function (sprite, 
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         `)
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
+    sprites.destroyAllSpritesOfKind(SpriteKind.dragonnest)
     sprites.destroyAllSpritesOfKind(SpriteKind.Object)
 })
 controller.combos.attachCombo("a+b", function () {
@@ -336,11 +337,10 @@ controller.combos.attachCombo("a+b", function () {
         game.showLongText("You don't have enough resources!", DialogLayout.Bottom)
     }
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.castle.shrub, function (sprite, location) {
-	
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.egg, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
+        eggsfound.setImage(otherSprite.image)
+        info.player4.changeScoreBy(1)
         otherSprite.setImage(img`
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
@@ -523,12 +523,38 @@ function Hard () {
         tiles.placeOnTile(seeds, seedspanwhard)
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.dragonnest, function (sprite, otherSprite) {
+    if (info.player4.score() >= 1) {
+        eggs.setImage(eggsfound.image)
+        eggsfound.setImage(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `)
+        tiles.placeOnTile(eggs, otherSprite.tilemapLocation())
+        for (let index = 0; index < 1; index++) {
+            info.player4.changeScoreBy(-1)
+        }
+    }
+})
 function Easy () {
     tiles.setCurrentTilemap(tilemap`level0`)
     tiles.placeOnTile(Player1, tiles.getTileLocation(17, 16))
     for (let seedspawneasy of tiles.getTilesByType(sprites.castle.tileDarkGrass3)) {
-        let seedspawn: tiles.Location = null
-        tiles.placeOnTile(seeds, seedspawn)
+        tiles.placeOnTile(seeds, seedspawneasy)
     }
     for (let nest of tiles.getTilesByType(sprites.castle.shrub)) {
         eggs = sprites.create(egglist.shift(), SpriteKind.egg)
@@ -715,26 +741,26 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         .cbbc.....cbbc.
         `, SpriteKind.Object)
     tiles.placeOnTile(couch, tiles.getTileLocation(14, 7))
-    housenest = sprites.create(img`
-        . . . . . . . . b . . . . . . . 
-        . . . . . . b d d c . . . . . . 
-        . . . . . b 1 1 d d c . . . . . 
-        . . . . b 1 1 1 d 1 1 b . . . . 
-        . . . . c 1 1 1 d 1 1 1 c c . . 
-        b b b c d 1 1 b d 1 1 d 1 1 b b 
-        b d 1 1 d d b d c c b d 1 1 1 b 
-        b 1 1 1 1 d c b c c d d 1 1 1 b 
-        b 1 1 1 1 b c d d d 1 1 d d c . 
-        . b 1 1 d d b b d b 1 1 b c c . 
-        . . c b d d b 1 1 d b d b c . . 
-        . . c 1 1 d d 1 1 1 d d d b . . 
-        . b d 1 1 1 d 1 1 d 1 1 1 d b . 
-        . b d 1 1 1 d b b d 1 1 1 1 b . 
-        . . b 1 1 d c c b b d 1 1 d b . 
-        . . b b b b . . . b b b b b b . 
-        `, SpriteKind.Object)
-    for (let houselocation of list) {
-    	
+    for (let houselocation of tiles.getTilesByType(sprites.dungeon.floorLightMoss)) {
+        housenest = sprites.create(img`
+            . . . . . . . . b . . . . . . . 
+            . . . . . . b d d c . . . . . . 
+            . . . . . b 1 1 d d c . . . . . 
+            . . . . b 1 1 1 d 1 1 b . . . . 
+            . . . . c 1 1 1 d 1 1 1 c c . . 
+            b b b c d 1 1 b d 1 1 d 1 1 b b 
+            b d 1 1 d d b d c c b d 1 1 1 b 
+            b 1 1 1 1 d c b c c d d 1 1 1 b 
+            b 1 1 1 1 b c d d d 1 1 d d c . 
+            . b 1 1 d d b b d b 1 1 b c c . 
+            . . c b d d b 1 1 d b d b c . . 
+            . . c 1 1 d d 1 1 1 d d d b . . 
+            . b d 1 1 1 d 1 1 d 1 1 1 d b . 
+            . b d 1 1 1 d b b d 1 1 1 1 b . 
+            . . b 1 1 d c c b b d 1 1 d b . 
+            . . b b b b . . . b b b b b b . 
+            `, SpriteKind.dragonnest)
+        tiles.placeOnTile(housenest, houselocation)
     }
     tiles.placeOnTile(Player1, tiles.getTileLocation(8, 8))
     scene.setBackgroundImage(img`
@@ -868,6 +894,7 @@ let seeds: Sprite = null
 let eggs: Sprite = null
 let Player1: Sprite = null
 let difficulty = ""
+let eggsfound: Sprite = null
 let Dragon_food: Sprite = null
 let egglist: Image[] = []
 info.setScore(0)
@@ -999,6 +1026,24 @@ Dragon_food = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.dragonfood)
+eggsfound = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.dragonfood)
 info.player2.setScore(0)
 info.player3.setScore(0)
 difficulty = game.askForString("Choose Difficulty (e,h)", 1)
@@ -1020,6 +1065,7 @@ Player1 = sprites.create(img`
     . . . . f f f f f f . . . . 
     . . . . f f . . f f . . . . 
     `, SpriteKind.Player)
+info.player4.setScore(0)
 if (difficulty == "e") {
     Easy()
 } else if (difficulty == "h") {
