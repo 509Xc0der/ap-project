@@ -37,6 +37,12 @@ scene.onHitWall(SpriteKind.Player, function (sprite, location) {
         info.changeScoreBy(1)
     }
 })
+scene.onOverlapTile(SpriteKind.Enemy, assets.tile`myTile17`, function (sprite, location) {
+    effects.clearParticles(sprite)
+    sprite.follow(null)
+    sprite.setKind(SpriteKind.egg)
+    tiles.placeOnTile(sprite, location)
+})
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile12`, function (sprite, location) {
     if (difficulty == "e") {
         tiles.setCurrentTilemap(tilemap`level0`)
@@ -55,7 +61,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile12`, function (sprite, 
         tiles.setTileAt(tiles.getTileLocation(17, 12), assets.tile`myTile0`)
         tiles.setTileAt(tiles.getTileLocation(18, 12), assets.tile`myTile2`)
     }
-    tiles.placeOnTile(Player1, tiles.getTileLocation(17, 14))
+    tiles.placeOnTile(Player1, tiles.getTileLocation(17, 15))
     scene.setBackgroundImage(img`
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
@@ -339,27 +345,10 @@ controller.combos.attachCombo("a+b", function () {
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.egg, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
-        eggsfound.setImage(otherSprite.image)
+        game.showLongText("Bring the egg to your house!", DialogLayout.Bottom)
         info.player4.changeScoreBy(1)
-        otherSprite.setImage(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `)
-        game.showLongText("Bring the egg to your house! (Press \"A\" to place in its nest)", DialogLayout.Bottom)
+        otherSprite.setKind(SpriteKind.Enemy)
+        otherSprite.follow(sprite)
     }
 })
 controller.menu.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -523,33 +512,6 @@ function Hard () {
         tiles.placeOnTile(seeds, seedspanwhard)
     }
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.dragonnest, function (sprite, otherSprite) {
-    if (info.player4.score() >= 1) {
-        eggs.setImage(eggsfound.image)
-        eggsfound.setImage(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            `)
-        tiles.placeOnTile(eggs, otherSprite.tilemapLocation())
-        for (let index = 0; index < 1; index++) {
-            info.player4.changeScoreBy(-1)
-        }
-    }
-})
 function Easy () {
     tiles.setCurrentTilemap(tilemap`level0`)
     tiles.placeOnTile(Player1, tiles.getTileLocation(17, 16))
@@ -687,6 +649,9 @@ function Easy () {
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, location) {
     tiles.setCurrentTilemap(tilemap`level6`)
+    for (let value of sprites.allOfKind(SpriteKind.Enemy)) {
+        tiles.placeOnTile(value, tiles.getTileLocation(8, 8))
+    }
     bed = sprites.create(img`
         ...bbccccccbb...
         ..bdddddddd1db..
@@ -741,27 +706,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         .cbbc.....cbbc.
         `, SpriteKind.Object)
     tiles.placeOnTile(couch, tiles.getTileLocation(14, 7))
-    for (let houselocation of tiles.getTilesByType(sprites.dungeon.floorLightMoss)) {
-        housenest = sprites.create(img`
-            . . . . . . . . b . . . . . . . 
-            . . . . . . b d d c . . . . . . 
-            . . . . . b 1 1 d d c . . . . . 
-            . . . . b 1 1 1 d 1 1 b . . . . 
-            . . . . c 1 1 1 d 1 1 1 c c . . 
-            b b b c d 1 1 b d 1 1 d 1 1 b b 
-            b d 1 1 d d b d c c b d 1 1 1 b 
-            b 1 1 1 1 d c b c c d d 1 1 1 b 
-            b 1 1 1 1 b c d d d 1 1 d d c . 
-            . b 1 1 d d b b d b 1 1 b c c . 
-            . . c b d d b 1 1 d b d b c . . 
-            . . c 1 1 d d 1 1 1 d d d b . . 
-            . b d 1 1 1 d 1 1 d 1 1 1 d b . 
-            . b d 1 1 1 d b b d 1 1 1 1 b . 
-            . . b 1 1 d c c b b d 1 1 d b . 
-            . . b b b b . . . b b b b b b . 
-            `, SpriteKind.dragonnest)
-        tiles.placeOnTile(housenest, houselocation)
-    }
     tiles.placeOnTile(Player1, tiles.getTileLocation(8, 8))
     scene.setBackgroundImage(img`
         dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
@@ -887,16 +831,15 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         `)
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
 })
-let housenest: Sprite = null
 let couch: Sprite = null
 let bed: Sprite = null
 let seeds: Sprite = null
 let eggs: Sprite = null
 let Player1: Sprite = null
 let difficulty = ""
-let eggsfound: Sprite = null
 let Dragon_food: Sprite = null
 let egglist: Image[] = []
+music.play(music.stringPlayable("A E F A F F E G ", 100), music.PlaybackMode.LoopingInBackground)
 info.setScore(0)
 egglist = [
 img`
@@ -1026,7 +969,7 @@ Dragon_food = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.dragonfood)
-eggsfound = sprites.create(img`
+let eggsfound = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
