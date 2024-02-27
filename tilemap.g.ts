@@ -37,9 +37,11 @@ namespace myTiles {
     //% fixedInstance jres blockIdentity=images._tile
     export const tile18 = image.ofBuffer(hex``);
     //% fixedInstance jres blockIdentity=images._tile
-    export const tile16 = image.ofBuffer(hex``);
-    //% fixedInstance jres blockIdentity=images._tile
     export const tile19 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile20 = image.ofBuffer(hex``);
+    //% fixedInstance jres blockIdentity=images._tile
+    export const tile16 = image.ofBuffer(hex``);
 
     helpers._registerFactory("tilemap", function(name: string) {
         switch(helpers.stringTrim(name)) {
@@ -228,7 +230,7 @@ namespace myTiles {
 2 . . . . . . . . . . . . . . 2 
 2 . . . . . . . . . . . . . . 2 
 2 2 2 2 2 2 2 2 . 2 2 2 2 2 2 2 
-`, [myTiles.transparency16,myTiles.tile14,myTiles.tile15,myTiles.tile17,sprites.dungeon.floorLight0,sprites.dungeon.darkGroundSouthEast0,sprites.dungeon.darkGroundSouth,sprites.dungeon.darkGroundSouthWest0,sprites.dungeon.darkGroundNorthWest0,sprites.dungeon.darkGroundNorth,sprites.dungeon.darkGroundNorthEast0,myTiles.tile19], TileScale.Sixteen);
+`, [myTiles.transparency16,myTiles.tile14,myTiles.tile15,myTiles.tile17,sprites.dungeon.floorLight0,sprites.dungeon.darkGroundSouthEast0,sprites.dungeon.darkGroundSouth,sprites.dungeon.darkGroundSouthWest0,sprites.dungeon.darkGroundNorthWest0,sprites.dungeon.darkGroundNorth,sprites.dungeon.darkGroundNorthEast0,myTiles.tile19,myTiles.tile16,myTiles.tile20], TileScale.Sixteen);
         }
         return null;
     })
@@ -270,10 +272,12 @@ namespace myTiles {
             case "tile17":return tile17;
             case "myTile16":
             case "tile18":return tile18;
-            case "myTile14":
-            case "tile16":return tile16;
             case "myTile17":
             case "tile19":return tile19;
+            case "myTile18":
+            case "tile20":return tile20;
+            case "myTile14":
+            case "tile16":return tile16;
         }
         return null;
     })

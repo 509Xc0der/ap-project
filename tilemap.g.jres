@@ -106,17 +106,23 @@
         "tilemapTile": true,
         "displayName": "myTile16"
     },
-    "tile16": {
-        "data": "hwQQABAAAADd3d3d3d3d3d3d3d3d0d3d3e3e3d3d3d3d7d7d3t3d7d3d3d3d3d3d3d3d3d3d3d3d0d3d3d3d3d3d3d0R3d0d3d3R3RHd3t3d3d3d3d3d3dHd3d3d3d3d3d3d7t3d3d3d7d3u3d3d3d3d3d3d3dHdHd3d3d3d3d7d3d3d3d7d3Q==",
-        "mimeType": "image/x-mkcd-f4",
-        "tilemapTile": true,
-        "displayName": "myTile14"
-    },
     "tile19": {
         "data": "hwQQABAAAAAdEbG72xEREdHdvR2x3bvd0d29ERHM3bvR3c0RERsRsdG93B3RHRGx0RsR3dvdEb29ERHLvNvdvNsRsb29EbG8293dzN0RsbvNHRHMvR3du9EcEdsR2xG90b3R3RHdEbHR3RwRvdsRsdHdHBHNvB290d29Eczdu7u7u7u7vbu72w==",
         "mimeType": "image/x-mkcd-f4",
         "tilemapTile": true,
         "displayName": "myTile17"
+    },
+    "tile20": {
+        "data": "hwQQABAAAADd3d3d3d3d3d3d3d3d0d3d3e3e3d3d3d3d7d7d3t3d7d3d3d3d3d3d3d3d3d3d3d3d0d3d3d3d3d3d3d0R3d0d3d3R3RHd3t3d3d3d3d3d3dHd3d3d3d3d3d3d7t3d3d3d7d3u3d3d3d3d3d3d3dHdHd3d3d3d3d7d3d3d3d7d3Q==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile18"
+    },
+    "tile16": {
+        "data": "hwQQABAAAADd3d3d3d3d3d3d3d3d0d3d3e3e3d3d3d3d7d7d3t3d7d3d3d3d3d3d3d3d3Wfd3d3d0d3dd9bd3d3d3d0R190d3d3R3RHd3t3d3d3d3d3d3dHd3d3d3d3d3d3d7t3d3d3d7d3u3d3d3d3d3d3d3dHdHd3d3d3d3d7d3d3d3d7d3Q==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "myTile14"
     },
     "level2": {
         "id": "level2",
@@ -240,7 +246,9 @@
             "sprites.dungeon.darkGroundNorthWest0",
             "sprites.dungeon.darkGroundNorth",
             "sprites.dungeon.darkGroundNorthEast0",
-            "myTiles.tile19"
+            "myTiles.tile19",
+            "myTiles.tile16",
+            "myTiles.tile20"
         ],
         "displayName": "level6"
     },
