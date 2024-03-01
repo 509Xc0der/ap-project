@@ -4,6 +4,7 @@ namespace SpriteKind {
     export const egg = SpriteKind.create()
     export const dragonfood = SpriteKind.create()
     export const dragonnest = SpriteKind.create()
+    export const bed = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.dragon, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
@@ -175,9 +176,65 @@ controller.player2.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pr
                 .......f66.....66.............
                 `)
             tiles.placeOnTile(Player1, dragonfriend.tilemapLocation())
-            controller.moveSprite(Player1)
+            controller.moveSprite(Player1, 75, 75)
             statusbardragon.setColor(5, 13)
-            spriteutils.onSpriteUpdateInterval(statusbardragon, 5000, function (sprite) {
+            spriteutils.onSpriteUpdateInterval(dragonfriend, 5000, function (sprite) {
+                statusbardragon.value += -1
+            })
+        } else if (tiles.tileAtLocationEquals(tiles.getTileLocation(1, 1), sprites.dungeon.darkGroundNorthWest0)) {
+            mounty = 0
+            Player1 = sprites.create(img`
+                . f f f . f f f f . f f f . 
+                f f f f f c c c c f f f f f 
+                f f f f b c c c c b f f f f 
+                f f f c 3 c c c c 3 c f f f 
+                . f 3 3 c c c c c c 3 3 f . 
+                . f c c c c 4 4 c c c c f . 
+                . f f c c 4 4 4 4 c c f f . 
+                . f f f b f 4 4 f b f f f . 
+                . f f 4 1 f d d f 1 4 f f . 
+                . . f f d d d d d d f f . . 
+                . . e f e 4 4 4 4 e f e . . 
+                . e 4 f b 3 3 3 3 b f 4 e . 
+                . 4 d f 3 3 3 3 3 3 c d 4 . 
+                . 4 4 f 6 6 6 6 6 6 f 4 4 . 
+                . . . . f f f f f f . . . . 
+                . . . . f f . . f f . . . . 
+                `, SpriteKind.Player)
+            animation.stopAnimation(animation.AnimationTypes.ImageAnimation, dragonfriend)
+            animation.runMovementAnimation(
+            dragonfriend,
+            animation.animationPresets(animation.bobbing),
+            2000,
+            true
+            )
+            dragonfriend.setImage(img`
+                ......ff......fffffffff.......
+                .....ff......fff777776ff......
+                ....f7f.....ff7fff776.........
+                ..ff77ff....f7777ff6..........
+                .f77777ff..ffff777ff..........
+                f77f76f77f.f77ff66............
+                f7776.f77f.f777ff.............
+                .666...f7f.f7766f.............
+                .......f7fff776...............
+                .......f77fffffffff...........
+                .......f7777777777fff.........
+                .......f777777777777fff.......
+                .......f77777777777777ff......
+                ........ff7777777777777ff....7
+                .........ff6f66fffff7777f....7
+                .........f6.....f6.66777ff..76
+                .........f6.....f6...6777f..6.
+                .........f6.....f6....6777776.
+                ........ff6....ff6.....6ffff6.
+                .......f776...f776............
+                .......f66.....66.............
+                `)
+            tiles.placeOnTile(Player1, dragonfriend.tilemapLocation())
+            controller.moveSprite(Player1, 75, 75)
+            statusbardragon.setColor(5, 13)
+            spriteutils.onSpriteUpdateInterval(dragonfriend, 5000, function (sprite) {
                 statusbardragon.value += -1
             })
         } else {
@@ -242,7 +299,7 @@ controller.player2.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pr
                 .......f66.....66.............
                 `)
             tiles.placeOnTile(Player1, dragonfriend.tilemapLocation())
-            controller.moveSprite(Player1)
+            controller.moveSprite(Player1, 75, 75)
             statusbardragon.setColor(5, 13)
             animation.stopAnimation(animation.AnimationTypes.ImageAnimation, dragonfriend)
             animation.runMovementAnimation(
@@ -251,7 +308,7 @@ controller.player2.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pr
             2000,
             true
             )
-            spriteutils.onSpriteUpdateInterval(statusbardragon, 5000, function (sprite) {
+            spriteutils.onSpriteUpdateInterval(dragonfriend, 5000, function (sprite) {
                 statusbardragon.value += -1
             })
         }
@@ -894,7 +951,7 @@ function Mode (background: Image) {
             tiles.placeOnTile(seeds, seedspawneasy)
         }
         tiles.placeOnTile(Player1, tiles.getTileLocation(17, 16))
-        controller.moveSprite(Player1)
+        controller.moveSprite(Player1, 50, 50)
         scene.cameraFollowSprite(Player1)
     } else {
         tiles.setCurrentTilemap(tilemap`level18`)
@@ -906,11 +963,14 @@ function Mode (background: Image) {
             tiles.placeOnTile(seeds, seedspanwhard)
         }
         tiles.placeOnTile(Player1, tiles.getTileLocation(17, 16))
-        controller.moveSprite(Player1)
+        controller.moveSprite(Player1, 50, 50)
         scene.cameraFollowSprite(Player1)
         game.showLongText("Press \"menu\" to build your house", DialogLayout.Bottom)
     }
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.bed, function (sprite, otherSprite) {
+	
+})
 statusbars.onZero(StatusBarKind.Health, function (status) {
     statusbaregg.setColor(0, 0)
     statusbaregg.spriteAttachedTo().setImage(img`
@@ -1163,7 +1223,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
     for (let nestnumber of sprites.allOfKind(SpriteKind.Enemy)) {
         tiles.placeOnTile(nestnumber, tiles.getTileLocation(8, 8))
     }
-    bed = sprites.create(img`
+    bed.setImage(img`
         ...bbccccccbb...
         ..bdddddddd1db..
         .bddbbbbbbbbddb.
@@ -1188,7 +1248,7 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         .cccccccccccccc.
         .fbbfbbbbbbfbbf.
         ..ff........ff..
-        `, SpriteKind.Object)
+        `)
     tiles.placeOnTile(bed, tiles.getTileLocation(1, 1))
     couch = sprites.create(img`
         .........cccc..
@@ -1343,7 +1403,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
 })
 let couch: Sprite = null
-let bed: Sprite = null
 let seeds: Sprite = null
 let eggs: Sprite = null
 let dragonfriend: Sprite = null
@@ -1352,6 +1411,7 @@ let statusbardragon: StatusBarSprite = null
 let mounty = 0
 let unmounty = 0
 let Player1: Sprite = null
+let bed: Sprite = null
 let difficulty = ""
 let Dragon_food: Sprite = null
 let egglist: Image[] = []
@@ -1506,6 +1566,24 @@ let eggsfound = sprites.create(img`
 info.player2.setScore(0)
 info.player3.setScore(0)
 difficulty = game.askForString("Choose Difficulty (e,h)", 1)
+bed = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.bed)
 Player1 = sprites.create(img`
     . f f f . f f f f . f f f . 
     f f f f f c c c c f f f f f 
@@ -1779,7 +1857,7 @@ mounty = 0
 info.player4.setScore(0)
 game.onUpdate(function () {
     if (mounty == 2) {
-        controller.moveSprite(dragonfriend)
+        controller.moveSprite(dragonfriend, 150, 150)
         if (controller.left.isPressed()) {
             animation.runImageAnimation(
             dragonfriend,
