@@ -4,13 +4,13 @@ namespace SpriteKind {
     export const egg = SpriteKind.create()
     export const dragonfood = SpriteKind.create()
     export const dragonnest = SpriteKind.create()
-    export const bed = SpriteKind.create()
+    export const furniture_placed = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.dragon, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
         if (info.player3.score() >= 1) {
             info.player3.changeScoreBy(-1)
-            statusbardragon.value += 1
+            statusbars.getStatusBarAttachedTo(StatusBarKind.Energy, otherSprite).value += 1
         } else {
             game.showLongText("You don't have enough food!", DialogLayout.Bottom)
         }
@@ -109,6 +109,23 @@ scene.onHitWall(SpriteKind.Player, function (sprite, location) {
         tiles.setTileAt(location, sprites.castle.tileGrass1)
         tiles.setWallAt(location, false)
         info.changeScoreBy(1)
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorDarkDiamond, function (sprite, location) {
+    furniture = game.askForString("Would you like to place furniture? (y,n)", 1)
+    if (furniture == "y") {
+        if (info.score() >= 10) {
+            info.changeScoreBy(-10)
+            tiles.placeOnTile(Player1, tiles.getTileLocation(4, 6))
+            game.splash("Use arrows to position, then press \"l\" to place")
+            furniture_1 = sprites.create(furniture_images.removeAt(randint(0, furniture_images.length - 1)), SpriteKind.Player)
+            furniture_1.follow(Player1)
+        } else {
+            game.splash("You don't have enough rescources")
+            tiles.placeOnTile(Player1, tiles.getTileLocation(4, 6))
+        }
+    } else {
+        tiles.placeOnTile(Player1, tiles.getTileLocation(4, 6))
     }
 })
 scene.onOverlapTile(SpriteKind.Enemy, assets.tile`myTile17`, function (sprite, location) {
@@ -232,7 +249,7 @@ controller.player2.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pr
                 .......f66.....66.............
                 `)
             tiles.placeOnTile(Player1, dragonfriend.tilemapLocation())
-            controller.moveSprite(Player1, 75, 75)
+            controller.moveSprite(Player1)
             statusbardragon.setColor(5, 13)
             spriteutils.onSpriteUpdateInterval(dragonfriend, 5000, function (sprite) {
                 statusbardragon.value += -1
@@ -299,7 +316,7 @@ controller.player2.onButtonEvent(ControllerButton.Down, ControllerButtonEvent.Pr
                 .......f66.....66.............
                 `)
             tiles.placeOnTile(Player1, dragonfriend.tilemapLocation())
-            controller.moveSprite(Player1, 75, 75)
+            controller.moveSprite(Player1)
             statusbardragon.setColor(5, 13)
             animation.stopAnimation(animation.AnimationTypes.ImageAnimation, dragonfriend)
             animation.runMovementAnimation(
@@ -951,7 +968,7 @@ function Mode (background: Image) {
             tiles.placeOnTile(seeds, seedspawneasy)
         }
         tiles.placeOnTile(Player1, tiles.getTileLocation(17, 16))
-        controller.moveSprite(Player1, 50, 50)
+        controller.moveSprite(Player1)
         scene.cameraFollowSprite(Player1)
     } else {
         tiles.setCurrentTilemap(tilemap`level18`)
@@ -963,14 +980,11 @@ function Mode (background: Image) {
             tiles.placeOnTile(seeds, seedspanwhard)
         }
         tiles.placeOnTile(Player1, tiles.getTileLocation(17, 16))
-        controller.moveSprite(Player1, 50, 50)
+        controller.moveSprite(Player1)
         scene.cameraFollowSprite(Player1)
         game.showLongText("Press \"menu\" to build your house", DialogLayout.Bottom)
     }
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.bed, function (sprite, otherSprite) {
-	
-})
 statusbars.onZero(StatusBarKind.Health, function (status) {
     statusbaregg.setColor(0, 0)
     statusbaregg.spriteAttachedTo().setImage(img`
@@ -1068,6 +1082,10 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     200,
     true
     )
+})
+controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
+    furniture_1.follow(null)
+    furniture_1.setKind(SpriteKind.furniture_placed)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.egg, function (sprite, otherSprite) {
     if (controller.A.isPressed()) {
@@ -1223,7 +1241,8 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
     for (let nestnumber of sprites.allOfKind(SpriteKind.Enemy)) {
         tiles.placeOnTile(nestnumber, tiles.getTileLocation(8, 8))
     }
-    bed.setImage(img`
+    furniture_images = [
+    img`
         ...bbccccccbb...
         ..bdddddddd1db..
         .bddbbbbbbbbddb.
@@ -1248,9 +1267,8 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         .cccccccccccccc.
         .fbbfbbbbbbfbbf.
         ..ff........ff..
-        `)
-    tiles.placeOnTile(bed, tiles.getTileLocation(1, 1))
-    couch = sprites.create(img`
+        `,
+    img`
         .........cccc..
         ........cbdddc.
         ..cccccccbdddbc
@@ -1275,8 +1293,128 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         cbbbbbbbcbbbbbc
         cccccccccccccc.
         .cbbc.....cbbc.
-        `, SpriteKind.Object)
-    tiles.placeOnTile(couch, tiles.getTileLocation(14, 7))
+        `,
+    img`
+        .cccccccccccccc.
+        cbddddddddddddbc
+        cddddddddddddddc
+        cddddddddddddddc
+        cddddddddddddddc
+        cddddddddddddddc
+        cddddddddddddddc
+        cbddddddddddddbc
+        ccbbbbbbbbbbbbcc
+        ccffffffffffffcc
+        cbc44c7c66c3ccbc
+        cbc44c7c66c3ccbc
+        fbc44c7c66c3ccbf
+        fdccccccccccccdf
+        fdcbbddddddbbcdf
+        fdffffffffffffdf
+        fdcc4c44c3c7ccdf
+        fdcc4c44c3c7ccdf
+        fdcccc44ccc7ccdf
+        fdccccccccccccdf
+        fdcbbddddddbbcdf
+        fdcbbddddddbbcdf
+        fdffffffffffffdf
+        ffffffffffffffff
+        `,
+    img`
+        ..cccccccccccccccccccccccccccc..
+        .bddddddddddddddddddddddddddddb.
+        cddddddddddddddddddddddddddddddc
+        cbbb3ddd33d3dddd3333dddd3d333bbc
+        cddddddddddddddddddddddddddddddc
+        cddddddddddddddddddddddddddddddc
+        cddddddddddddddddddddddddddddddc
+        cbb33dddd3bb33d33dd33ddd33333bbc
+        cddddddddddddddddddddddddddddddc
+        cddddddddddddddddddddddddddddddc
+        cddddddddddddddddddddddddddddddc
+        cb333dddd3db3dddddddd33333ddd3bc
+        cddddddddddddddddddddddddddddddc
+        cddddddddddddddddddddddddddddddc
+        cddddddddddddddddddddddddddddddc
+        cbbbbbb3333333dddd333d3dddd33bbc
+        cddddddddddddddddddddddddddddddc
+        cbddddddddddddddddddddddddddddbc
+        cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc
+        cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc
+        .cccccccccccccccccccccccccccccc.
+        ..cbbc....................cbbc..
+        ..c33c....................c33c..
+        ...cc......................cc...
+        `,
+    img`
+        ..3b3b3b3b3b3b3b3b3b3b3b3b3b3b..
+        .3cc3b3b3b3b3b3b3b3b3b3b3b3bcc3.
+        bbcc3cccccccccccccccccccccc3ccbb
+        b333cc33333333333333333333cc333b
+        bbbcc3333333333333333333333ccbbb
+        b33c333c3333333c3333333c3333c33b
+        bbbc333333333333333333333333cbbb
+        b33c333333333333333333333333c33b
+        bbbc333333333333333333333333cbbb
+        b33c3333333c3333333c33333333c33b
+        bbbc333333333333333333333333cbbb
+        b33c333333333333333333333333c33b
+        bbbc333333333333333333333333cbbb
+        b33c333c3333333c3333333c3333c33b
+        bbbc333333333333333333333333cbbb
+        b33c333333333333333333333333c33b
+        bbbc333333333333333333333333cbbb
+        b33c3333333c33333333c3333333c33b
+        bbbcc3333333333333333333333ccbbb
+        b333cc33333333333333333333cccccb
+        bbcc3cccccccccccccccccccccc3ccbb
+        b3cc3b3b3b3b3b3b3b3b3b3b3b3bcc3b
+        .bbb3b3b3b3b3b3b3b3b3b3b3b3b3bb.
+        ...bbbbbbbbbbbbbbbbbbbbbbbbbb...
+        `,
+    img`
+        . b b b b b b b b b b b b b b . 
+        b e 4 4 4 4 4 4 4 4 4 4 4 4 4 b 
+        b e 4 4 4 4 4 4 4 4 4 4 4 4 e b 
+        b e e 4 4 4 4 4 4 4 4 4 4 e e b 
+        b b b b b b b d d b b b b b b b 
+        . b b b b b b c c b b b b b b . 
+        b c c c c c b c c b c c c c c b 
+        b c c c c c c b b c c c c c c b 
+        b c c c c c c c c c c c c c c b 
+        b c c c c c c c c c c c c c c b 
+        b b b b b b b b b b b b b b b b 
+        b e e e e e e e e e e e e e e b 
+        b e e e e e e e e e e e e e e b 
+        b c e e e e e e e e e e e e c b 
+        b b b b b b b b b b b b b b b b 
+        . b b . . . . . . . . . . b b . 
+        `,
+    img`
+        ...bbbbbbbbbb...
+        ..b1111111111b..
+        .b111111111111b.
+        .b111111111111b.
+        .bddccccccccddb.
+        .bdc66666666cdb.
+        .bdc61d66666cdb.
+        .bdc6d666666cdb.
+        .bdc66666666cdb.
+        .bdc66666666cdb.
+        .bdc66666666cdb.
+        .bddccccccccddb.
+        .cbbbbbbbbbbbbc.
+        fccccccccccccccf
+        fbbbbbbbbbbbbbbf
+        fbcdddddddddddbf
+        fbcbbbbbbbbbbcbf
+        fbcbbbbbbbbbbcbf
+        fbccccccccccccbf
+        fbbbbbbbbbbbbbbf
+        fbffffffffffffbf
+        ffffffffffffffff
+        `
+    ]
     tiles.placeOnTile(Player1, tiles.getTileLocation(8, 8))
     scene.setBackgroundImage(img`
         dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
@@ -1402,16 +1540,17 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
         `)
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
 })
-let couch: Sprite = null
 let seeds: Sprite = null
 let eggs: Sprite = null
+let statusbardragon: StatusBarSprite = null
 let dragonfriend: Sprite = null
 let statusbaregg: StatusBarSprite = null
-let statusbardragon: StatusBarSprite = null
+let furniture_images: Image[] = []
+let furniture_1: Sprite = null
+let furniture = ""
 let mounty = 0
 let unmounty = 0
 let Player1: Sprite = null
-let bed: Sprite = null
 let difficulty = ""
 let Dragon_food: Sprite = null
 let egglist: Image[] = []
@@ -1566,7 +1705,7 @@ let eggsfound = sprites.create(img`
 info.player2.setScore(0)
 info.player3.setScore(0)
 difficulty = game.askForString("Choose Difficulty (e,h)", 1)
-bed = sprites.create(img`
+let bed = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -1583,7 +1722,7 @@ bed = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
-    `, SpriteKind.bed)
+    `, SpriteKind.furniture_placed)
 Player1 = sprites.create(img`
     . f f f . f f f f . f f f . 
     f f f f f c c c c f f f f f 
