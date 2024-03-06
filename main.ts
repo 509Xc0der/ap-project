@@ -118,8 +118,33 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.floorDarkDiamond, functio
             info.changeScoreBy(-10)
             tiles.placeOnTile(Player1, tiles.getTileLocation(4, 6))
             game.splash("Use arrows to position, then press \"l\" to place")
-            furniture_1 = sprites.create(furniture_images.removeAt(randint(0, furniture_images.length - 1)), SpriteKind.Player)
-            furniture_1.follow(Player1)
+            if (furniture_images.length == 0) {
+                game.splash("That was the last of the furniture!")
+            } else {
+                sprites.destroy(Player1)
+                furniture_1 = sprites.create(furniture_images.removeAt(randint(0, furniture_images.length - 1)), SpriteKind.Player)
+                Player1 = sprites.create(img`
+                    . f f f . f f f f . f f f . 
+                    f f f f f c c c c f f f f f 
+                    f f f f b c c c c b f f f f 
+                    f f f c 3 c c c c 3 c f f f 
+                    . f 3 3 c c c c c c 3 3 f . 
+                    . f c c c c 4 4 c c c c f . 
+                    . f f c c 4 4 4 4 c c f f . 
+                    . f f f b f 4 4 f b f f f . 
+                    . f f 4 1 f d d f 1 4 f f . 
+                    . . f f d d d d d d f f . . 
+                    . . e f e 4 4 4 4 e f e . . 
+                    . e 4 f b 3 3 3 3 b f 4 e . 
+                    . 4 d f 3 3 3 3 3 3 c d 4 . 
+                    . 4 4 f 6 6 6 6 6 6 f 4 4 . 
+                    . . . . f f f f f f . . . . 
+                    . . . . f f . . f f . . . . 
+                    `, SpriteKind.Player)
+                controller.moveSprite(Player1)
+                scene.cameraFollowSprite(Player1)
+                furniture_1.follow(Player1)
+            }
         } else {
             game.splash("You don't have enough rescources")
             tiles.placeOnTile(Player1, tiles.getTileLocation(4, 6))
@@ -1241,180 +1266,6 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile11`, function (sprite, 
     for (let nestnumber of sprites.allOfKind(SpriteKind.Enemy)) {
         tiles.placeOnTile(nestnumber, tiles.getTileLocation(8, 8))
     }
-    furniture_images = [
-    img`
-        ...bbccccccbb...
-        ..bdddddddd1db..
-        .bddbbbbbbbbddb.
-        .cdb11111111bdc.
-        .cbcbbbbbbbbcbc.
-        .fbbd111111dbbf.
-        .fcd11111111dcf.
-        f6cdd111111ddc6f
-        f66cbbbbbbbbcc6f
-        fcbb33333333bbcf
-        fbb3333333333bbf
-        fbb3d111111d3bbf
-        fbd1111111111dbf
-        fdd1111111111ddf
-        fdd1111111111ddf
-        fdd1111111111ddf
-        fdd1111111111ddf
-        fdd11dbbbbd11ddf
-        cdbbddddddddbbdf
-        cbddddddddddddbc
-        cddddddddddddddc
-        .cccccccccccccc.
-        .fbbfbbbbbbfbbf.
-        ..ff........ff..
-        `,
-    img`
-        .........cccc..
-        ........cbdddc.
-        ..cccccccbdddbc
-        .cdddddbcbdddbc
-        cbbdddddcbdddbc
-        cbbbbbbbcbdddbc
-        cbbccccccbdddbc
-        cccbddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbdddbc
-        .cbdddddcbbddbc
-        .ccccccccbbbbbc
-        .cdddddbcbbbbbc
-        cbbdddddcbbbbbc
-        cbbbbbbbcbbbbbc
-        cbbbbbbbcbbbbbc
-        cbbbbbbbcbbbbbc
-        cccccccccccccc.
-        .cbbc.....cbbc.
-        `,
-    img`
-        .cccccccccccccc.
-        cbddddddddddddbc
-        cddddddddddddddc
-        cddddddddddddddc
-        cddddddddddddddc
-        cddddddddddddddc
-        cddddddddddddddc
-        cbddddddddddddbc
-        ccbbbbbbbbbbbbcc
-        ccffffffffffffcc
-        cbc44c7c66c3ccbc
-        cbc44c7c66c3ccbc
-        fbc44c7c66c3ccbf
-        fdccccccccccccdf
-        fdcbbddddddbbcdf
-        fdffffffffffffdf
-        fdcc4c44c3c7ccdf
-        fdcc4c44c3c7ccdf
-        fdcccc44ccc7ccdf
-        fdccccccccccccdf
-        fdcbbddddddbbcdf
-        fdcbbddddddbbcdf
-        fdffffffffffffdf
-        ffffffffffffffff
-        `,
-    img`
-        ..cccccccccccccccccccccccccccc..
-        .bddddddddddddddddddddddddddddb.
-        cddddddddddddddddddddddddddddddc
-        cbbb3ddd33d3dddd3333dddd3d333bbc
-        cddddddddddddddddddddddddddddddc
-        cddddddddddddddddddddddddddddddc
-        cddddddddddddddddddddddddddddddc
-        cbb33dddd3bb33d33dd33ddd33333bbc
-        cddddddddddddddddddddddddddddddc
-        cddddddddddddddddddddddddddddddc
-        cddddddddddddddddddddddddddddddc
-        cb333dddd3db3dddddddd33333ddd3bc
-        cddddddddddddddddddddddddddddddc
-        cddddddddddddddddddddddddddddddc
-        cddddddddddddddddddddddddddddddc
-        cbbbbbb3333333dddd333d3dddd33bbc
-        cddddddddddddddddddddddddddddddc
-        cbddddddddddddddddddddddddddddbc
-        cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc
-        cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc
-        .cccccccccccccccccccccccccccccc.
-        ..cbbc....................cbbc..
-        ..c33c....................c33c..
-        ...cc......................cc...
-        `,
-    img`
-        ..3b3b3b3b3b3b3b3b3b3b3b3b3b3b..
-        .3cc3b3b3b3b3b3b3b3b3b3b3b3bcc3.
-        bbcc3cccccccccccccccccccccc3ccbb
-        b333cc33333333333333333333cc333b
-        bbbcc3333333333333333333333ccbbb
-        b33c333c3333333c3333333c3333c33b
-        bbbc333333333333333333333333cbbb
-        b33c333333333333333333333333c33b
-        bbbc333333333333333333333333cbbb
-        b33c3333333c3333333c33333333c33b
-        bbbc333333333333333333333333cbbb
-        b33c333333333333333333333333c33b
-        bbbc333333333333333333333333cbbb
-        b33c333c3333333c3333333c3333c33b
-        bbbc333333333333333333333333cbbb
-        b33c333333333333333333333333c33b
-        bbbc333333333333333333333333cbbb
-        b33c3333333c33333333c3333333c33b
-        bbbcc3333333333333333333333ccbbb
-        b333cc33333333333333333333cccccb
-        bbcc3cccccccccccccccccccccc3ccbb
-        b3cc3b3b3b3b3b3b3b3b3b3b3b3bcc3b
-        .bbb3b3b3b3b3b3b3b3b3b3b3b3b3bb.
-        ...bbbbbbbbbbbbbbbbbbbbbbbbbb...
-        `,
-    img`
-        . b b b b b b b b b b b b b b . 
-        b e 4 4 4 4 4 4 4 4 4 4 4 4 4 b 
-        b e 4 4 4 4 4 4 4 4 4 4 4 4 e b 
-        b e e 4 4 4 4 4 4 4 4 4 4 e e b 
-        b b b b b b b d d b b b b b b b 
-        . b b b b b b c c b b b b b b . 
-        b c c c c c b c c b c c c c c b 
-        b c c c c c c b b c c c c c c b 
-        b c c c c c c c c c c c c c c b 
-        b c c c c c c c c c c c c c c b 
-        b b b b b b b b b b b b b b b b 
-        b e e e e e e e e e e e e e e b 
-        b e e e e e e e e e e e e e e b 
-        b c e e e e e e e e e e e e c b 
-        b b b b b b b b b b b b b b b b 
-        . b b . . . . . . . . . . b b . 
-        `,
-    img`
-        ...bbbbbbbbbb...
-        ..b1111111111b..
-        .b111111111111b.
-        .b111111111111b.
-        .bddccccccccddb.
-        .bdc66666666cdb.
-        .bdc61d66666cdb.
-        .bdc6d666666cdb.
-        .bdc66666666cdb.
-        .bdc66666666cdb.
-        .bdc66666666cdb.
-        .bddccccccccddb.
-        .cbbbbbbbbbbbbc.
-        fccccccccccccccf
-        fbbbbbbbbbbbbbbf
-        fbcdddddddddddbf
-        fbcbbbbbbbbbbcbf
-        fbcbbbbbbbbbbcbf
-        fbccccccccccccbf
-        fbbbbbbbbbbbbbbf
-        fbffffffffffffbf
-        ffffffffffffffff
-        `
-    ]
     tiles.placeOnTile(Player1, tiles.getTileLocation(8, 8))
     scene.setBackgroundImage(img`
         dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd
@@ -1545,13 +1396,13 @@ let eggs: Sprite = null
 let statusbardragon: StatusBarSprite = null
 let dragonfriend: Sprite = null
 let statusbaregg: StatusBarSprite = null
-let furniture_images: Image[] = []
 let furniture_1: Sprite = null
 let furniture = ""
 let mounty = 0
 let unmounty = 0
-let Player1: Sprite = null
 let difficulty = ""
+let Player1: Sprite = null
+let furniture_images: Image[] = []
 let Dragon_food: Sprite = null
 let egglist: Image[] = []
 music.play(music.stringPlayable("A E F A F F E G ", 100), music.PlaybackMode.LoopingInBackground)
@@ -1684,6 +1535,246 @@ Dragon_food = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.dragonfood)
+furniture_images = [
+img`
+    ...bbccccccbb...
+    ..bdddddddd1db..
+    .bddbbbbbbbbddb.
+    .cdb11111111bdc.
+    .cbcbbbbbbbbcbc.
+    .fbbd111111dbbf.
+    .fcd11111111dcf.
+    f6cdd111111ddc6f
+    f66cbbbbbbbbcc6f
+    fcbb33333333bbcf
+    fbb3333333333bbf
+    fbb3d111111d3bbf
+    fbd1111111111dbf
+    fdd1111111111ddf
+    fdd1111111111ddf
+    fdd1111111111ddf
+    fdd1111111111ddf
+    fdd11dbbbbd11ddf
+    cdbbddddddddbbdf
+    cbddddddddddddbc
+    cddddddddddddddc
+    .cccccccccccccc.
+    .fbbfbbbbbbfbbf.
+    ..ff........ff..
+    `,
+img`
+    .........cccc..
+    ........cbdddc.
+    ..cccccccbdddbc
+    .cdddddbcbdddbc
+    cbbdddddcbdddbc
+    cbbbbbbbcbdddbc
+    cbbccccccbdddbc
+    cccbddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbdddbc
+    .cbdddddcbbddbc
+    .ccccccccbbbbbc
+    .cdddddbcbbbbbc
+    cbbdddddcbbbbbc
+    cbbbbbbbcbbbbbc
+    cbbbbbbbcbbbbbc
+    cbbbbbbbcbbbbbc
+    cccccccccccccc.
+    .cbbc.....cbbc.
+    `,
+img`
+    .cccccccccccccc.
+    cbddddddddddddbc
+    cddddddddddddddc
+    cddddddddddddddc
+    cddddddddddddddc
+    cddddddddddddddc
+    cddddddddddddddc
+    cddddddddddddddc
+    cdbbbbbbbbbbbbdc
+    cbbbbbbbbbbbbbbc
+    cbddddddddddddbc
+    cbcbbbcbbcbbbcbc
+    fbcbbbcddcbbbcbf
+    fbcbbbbccbbbbcbf
+    fbccccccccccccbf
+    fbbbbbbbbbbbbbbf
+    fbddddddddddddbf
+    fbcbbbcbbcbbbcbf
+    fbcbbbcddcbbbcbf
+    fbcbbbbccbbbbcbf
+    fbccccccccccccbf
+    fbbbbbbbbbbbbbbf
+    fbffffffffffffbf
+    ffffffffffffffff
+    `,
+img`
+    ..cccccccccccccccccccccccccccc..
+    .bddddddddddddddddddddddddddddb.
+    cddddddddddddddddddddddddddddddc
+    cbbb3ddd33d3dddd3333dddd3d333bbc
+    cddddddddddddddddddddddddddddddc
+    cddddddddddddddddddddddddddddddc
+    cddddddddddddddddddddddddddddddc
+    cbb33dddd3bb33d33dd33ddd33333bbc
+    cddddddddddddddddddddddddddddddc
+    cddddddddddddddddddddddddddddddc
+    cddddddddddddddddddddddddddddddc
+    cb333dddd3db3dddddddd33333ddd3bc
+    cddddddddddddddddddddddddddddddc
+    cddddddddddddddddddddddddddddddc
+    cddddddddddddddddddddddddddddddc
+    cbbbbbb3333333dddd333d3dddd33bbc
+    cddddddddddddddddddddddddddddddc
+    cbddddddddddddddddddddddddddddbc
+    cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc
+    cbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbc
+    .cccccccccccccccccccccccccccccc.
+    ..cbbc....................cbbc..
+    ..c33c....................c33c..
+    ...cc......................cc...
+    `,
+img`
+    ..3b3b3b3b3b3b3b3b3b3b3b3b3b3b..
+    .3cc3b3b3b3b3b3b3b3b3b3b3b3bcc3.
+    bbcc3cccccccccccccccccccccc3ccbb
+    b333cc33333333333333333333cc333b
+    bbbcc3333333333333333333333ccbbb
+    b33c333c3333333c3333333c3333c33b
+    bbbc333333333333333333333333cbbb
+    b33c333333333333333333333333c33b
+    bbbc333333333333333333333333cbbb
+    b33c3333333c3333333c33333333c33b
+    bbbc333333333333333333333333cbbb
+    b33c333333333333333333333333c33b
+    bbbc333333333333333333333333cbbb
+    b33c333c3333333c3333333c3333c33b
+    bbbc333333333333333333333333cbbb
+    b33c333333333333333333333333c33b
+    bbbc333333333333333333333333cbbb
+    b33c3333333c33333333c3333333c33b
+    bbbcc3333333333333333333333ccbbb
+    b333cc33333333333333333333cccccb
+    bbcc3cccccccccccccccccccccc3ccbb
+    b3cc3b3b3b3b3b3b3b3b3b3b3b3bcc3b
+    .bbb3b3b3b3b3b3b3b3b3b3b3b3b3bb.
+    ...bbbbbbbbbbbbbbbbbbbbbbbbbb...
+    `,
+img`
+    . b b b b b b b b b b b b b b . 
+    b e 4 4 4 4 4 4 4 4 4 4 4 4 4 b 
+    b e 4 4 4 4 4 4 4 4 4 4 4 4 e b 
+    b e e 4 4 4 4 4 4 4 4 4 4 e e b 
+    b b b b b b b d d b b b b b b b 
+    . b b b b b b c c b b b b b b . 
+    b c c c c c b c c b c c c c c b 
+    b c c c c c c b b c c c c c c b 
+    b c c c c c c c c c c c c c c b 
+    b c c c c c c c c c c c c c c b 
+    b b b b b b b b b b b b b b b b 
+    b e e e e e e e e e e e e e e b 
+    b e e e e e e e e e e e e e e b 
+    b c e e e e e e e e e e e e c b 
+    b b b b b b b b b b b b b b b b 
+    . b b . . . . . . . . . . b b . 
+    `,
+img`
+    ...bbbbbbbbbb...
+    ..b1111111111b..
+    .b111111111111b.
+    .b111111111111b.
+    .bddccccccccddb.
+    .bdc66666666cdb.
+    .bdc61d66666cdb.
+    .bdc6d666666cdb.
+    .bdc66666666cdb.
+    .bdc66666666cdb.
+    .bdc66666666cdb.
+    .bddccccccccddb.
+    .cbbbbbbbbbbbbc.
+    fccccccccccccccf
+    fbbbbbbbbbbbbbbf
+    fbcdddddddddddbf
+    fbcbbbbbbbbbbcbf
+    fbcbbbbbbbbbbcbf
+    fbccccccccccccbf
+    fbbbbbbbbbbbbbbf
+    fbffffffffffffbf
+    ffffffffffffffff
+    `,
+img`
+    .cccccccccccccccccccccc.
+    cbddddddddddddddddddddbc
+    cddddddddddddddddddddddc
+    cddddddddddddddddddddddc
+    cddddddddddddddddddddddc
+    cddddddddddddddddddddddc
+    cddddddddddddddddddddddc
+    cbddddddddddddddddddddbc
+    ccbbbbbbbbbbbbbbbbbbbbcc
+    ccffffffffffffffffffffcc
+    cbcc33c6c44c3c7c66c3ccbc
+    cbcc33c6c44c3c7c66c3ccbc
+    fbcc33c6c44ccc7c66c3ccbf
+    fdccccccccccccccccccccdf
+    fdcbbddddddddddddddbbcdf
+    fdffffffffffffffffffffdf
+    fdccc6c33c4c6c44c3c7ccdf
+    fdccc6c33c4c6c44c3c7ccdf
+    fdccc6c33ccc6c44ccc7ccdf
+    fdccccccccccccccccccccdf
+    fdcbbddddddddddddddbbcdf
+    fdcbbddddddddddddddbbcdf
+    fdffffffffffffffffffffdf
+    ffffffffffffffffffffffff
+    `,
+img`
+    ....................
+    ........3.3.3.......
+    .........333........
+    ........33533.......
+    .........333........
+    .......73.3.3.......
+    .......77.6..77.....
+    ........776.77......
+    ......888888888.....
+    ........fffff.......
+    .......8888888......
+    .......8998888......
+    .......8988888......
+    .......8888888......
+    .......8888888......
+    .......8888888......
+    ......888888888.....
+    ......fffffffff.....
+    ....................
+    ....................
+    `
+]
+Player1 = sprites.create(img`
+    . f f f . f f f f . f f f . 
+    f f f f f c c c c f f f f f 
+    f f f f b c c c c b f f f f 
+    f f f c 3 c c c c 3 c f f f 
+    . f 3 3 c c c c c c 3 3 f . 
+    . f c c c c 4 4 c c c c f . 
+    . f f c c 4 4 4 4 c c f f . 
+    . f f f b f 4 4 f b f f f . 
+    . f f 4 1 f d d f 1 4 f f . 
+    . . f f d d d d d d f f . . 
+    . . e f e 4 4 4 4 e f e . . 
+    . e 4 f b 3 3 3 3 b f 4 e . 
+    . 4 d f 3 3 3 3 3 3 c d 4 . 
+    . 4 4 f 6 6 6 6 6 6 f 4 4 . 
+    . . . . f f f f f f . . . . 
+    . . . . f f . . f f . . . . 
+    `, SpriteKind.Player)
 let eggsfound = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
@@ -1723,24 +1814,6 @@ let bed = sprites.create(img`
     . . . . . . . . . . . . . . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.furniture_placed)
-Player1 = sprites.create(img`
-    . f f f . f f f f . f f f . 
-    f f f f f c c c c f f f f f 
-    f f f f b c c c c b f f f f 
-    f f f c 3 c c c c 3 c f f f 
-    . f 3 3 c c c c c c 3 3 f . 
-    . f c c c c 4 4 c c c c f . 
-    . f f c c 4 4 4 4 c c f f . 
-    . f f f b f 4 4 f b f f f . 
-    . f f 4 1 f d d f 1 4 f f . 
-    . . f f d d d d d d f f . . 
-    . . e f e 4 4 4 4 e f e . . 
-    . e 4 f b 3 3 3 3 b f 4 e . 
-    . 4 d f 3 3 3 3 3 3 c d 4 . 
-    . 4 4 f 6 6 6 6 6 6 f 4 4 . 
-    . . . . f f f f f f . . . . 
-    . . . . f f . . f f . . . . 
-    `, SpriteKind.Player)
 if (difficulty == "e") {
     Mode(img`
         7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777
