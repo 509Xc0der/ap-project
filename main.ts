@@ -997,9 +997,9 @@ function Mode (background: Image) {
         scene.cameraFollowSprite(Player1)
     } else {
         tiles.setCurrentTilemap(tilemap`level18`)
-        for (let nest of tiles.getTilesByType(sprites.castle.shrub)) {
+        for (let nest2 of tiles.getTilesByType(sprites.castle.shrub)) {
             eggs = sprites.create(egglist.shift(), SpriteKind.egg)
-            tiles.placeOnTile(eggs, nest)
+            tiles.placeOnTile(eggs, nest2)
         }
         for (let seedspanwhard of tiles.getTilesByType(sprites.castle.tileDarkGrass3)) {
             tiles.placeOnTile(seeds, seedspanwhard)
@@ -1109,6 +1109,28 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     )
 })
 controller.player2.onButtonEvent(ControllerButton.Right, ControllerButtonEvent.Pressed, function () {
+    if (furniture_1.image == img`
+        e e e e e e e e e e e e 
+        e 1 1 1 6 6 6 7 7 7 6 e 
+        e 1 1 1 1 6 6 7 7 7 6 e 
+        e 6 6 6 6 6 6 6 e 6 6 e 
+        e 7 3 7 3 7 6 6 e 6 6 e 
+        e 7 3 7 7 7 3 7 7 7 7 e 
+        e 7 7 3 3 7 7 3 7 7 3 e 
+        e e e e e e e e e e e e 
+        ` || furniture_1.image == img`
+        e e e e e e e e 
+        e 6 6 6 6 6 6 e 
+        e 6 6 7 7 1 1 e 
+        e 6 1 1 7 1 7 e 
+        e b d 1 1 1 1 e 
+        e b d d 1 7 6 e 
+        e 6 b b d 6 6 e 
+        e e e e e e e e 
+        `) {
+        Player1.setFlag(SpriteFlag.GhostThroughWalls, true)
+        furniture_1.setFlag(SpriteFlag.GhostThroughWalls, true)
+    }
     furniture_1.follow(null)
     furniture_1.setKind(SpriteKind.furniture_placed)
 })
@@ -1755,6 +1777,26 @@ img`
     ......fffffffff.....
     ....................
     ....................
+    `,
+img`
+    e e e e e e e e e e e e 
+    e 1 1 1 6 6 6 7 7 7 6 e 
+    e 1 1 1 1 6 6 7 7 7 6 e 
+    e 6 6 6 6 6 6 6 e 6 6 e 
+    e 7 3 7 3 7 6 6 e 6 6 e 
+    e 7 3 7 7 7 3 7 7 7 7 e 
+    e 7 7 3 3 7 7 3 7 7 3 e 
+    e e e e e e e e e e e e 
+    `,
+img`
+    e e e e e e e e 
+    e 6 6 6 6 6 6 e 
+    e 6 6 7 7 1 1 e 
+    e 6 1 1 7 1 7 e 
+    e b d 1 1 1 1 e 
+    e b d d 1 7 6 e 
+    e 6 b b d 6 6 e 
+    e e e e e e e e 
     `
 ]
 Player1 = sprites.create(img`
@@ -2063,7 +2105,7 @@ if (difficulty == "e") {
 } else {
     game.reset()
 }
-game.showLongText("Press \"A\" to collect or place, Press \"B\" to break, or farm, Press \"menu\" to see your inventory", DialogLayout.Bottom)
+game.showLongText("Press \"A\" to collect, Press \"B\" to break, press \"B\" and \"A\" to plant, press \"B\" to ride your dragon.", DialogLayout.Bottom)
 unmounty = 0
 mounty = 0
 info.player4.setScore(0)
